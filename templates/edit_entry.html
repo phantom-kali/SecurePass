@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <title>Password Manager - Edit Entry</title>
+</head>
+<body>
+    <h2>Edit Entry</h2>
+    <form method="post" action="">
+        {{ form.hidden_tag() }}
+        
+        <label for="website">Website:</label>
+        {{ form.website() }}
+        {% for error in form.website.errors %}
+            <p style="color: red;">{{ error }}</p>
+        {% endfor %}
+
+        <label for="username">Username:</label>
+        {{ form.username() }}
+        {% for error in form.username.errors %}
+            <p style="color: red;">{{ error }}</p>
+        {% endfor %}
+
+        <label for="password">Password:</label>
+        {{ form.password() }}
+        {% for error in form.password.errors %}
+            <p style="color: red;">{{ error }}</p>
+        {% endfor %}
+
+        <input type="submit" value="Save Changes">
+    </form>
+</body>
+</html>

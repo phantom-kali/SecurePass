@@ -1,0 +1,133 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dashboard.css') }}">
+    <title>Password Manager - Dashboard</title>
+</head>
+
+
+<body class="dashboard-body">
+    <div class="dashboard-container">
+        <header>
+            <h2>Welcome, {{ username }}!</h2>
+            <button onclick="logout()" class="btn logout-btn">Logout</button>
+        </header>
+
+        
+        <section class="password-entries">
+            <h3>Password Entries:</h3>
+            <ul>
+                {% for entry in entries %}
+                    <li class="entry-item">
+                        <div class="entry-details">
+                            <strong>Website:</strong> {{ entry.website }}<br>
+                            <strong>Username:</strong> {{ entry.username }}<br>
+                            <strong>Password:</strong>
+                            <input type="password" id="passwordField{{ entry.id }}" value="{{ entry.password }}" readonly>
+                        </div>
+                        
+                        <div class="entry-actions">
+                            <!-- Add buttons for copy, view, edit, and remove -->
+                            <button class="copy-btn" onclick="copyToClipboard('{{ entry.password }}')">Copy Password</button>
+                            <button class="view-btn" onclick="togglePasswordVisibility('passwordField{{ entry.id }}', this)">View Password</button>
+
+                            <!-- Form for editing an entry -->
+                            <form method="post" action="{{ url_for('edit_entry', entry_id=entry.id) }}">
+                                <button class="edit-btn" type="submit">Edit</button>
+                            </form>
+
+                            <!-- Form for removing an entry -->
+                            <form method="post" action="{{ url_for('remove_entry', entry_id=entry.id) }}">
+                                <button class="remove-btn" type="submit">Remove</button>
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+
+        <!-- Form for adding a new entry -->
+        <section class="add-entry">
+            <h3>Add New Entry:</h3>
+            <form method="post" action="{{ url_for('add_entry') }}" class="form">
+                {{ form.hidden_tag() }}
+                
+                <div class="form-group">
+                    <label for="website">Website:</label>
+                    {{ form.website(class="form-control") }}
+                    {% for error in form.website.errors %}
+                        <p class="error-message">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    {{ form.username(class="form-control") }}
+                    {% for error in form.username.errors %}
+                        <p class="error-message">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    {{ form.password(class="form-control") }}
+                    {% for error in form.password.errors %}
+                        <p class="error-message">{{ error }}</p>
+                    {% endfor %}
+                </div>
+
+                <button type="submit" class="btn btn-primary">Add Entry</button>
+            </form>
+        </section>
+
+        <script>
+            function copyToClipboard(password) {
+                // Create a temporary textarea
+                const textarea = document.createElement('textarea');
+                textarea.value = password;
+                document.body.appendChild(textarea);
+
+                // Select and copy the text
+                textarea.select();
+                document.execCommand('copy');
+
+                // Remove the textarea
+                document.body.removeChild(textarea);
+
+                // Provide visual feedback or other actions if needed
+                alert('Password copied to clipboard!');
+            }
+
+            function togglePasswordVisibility(passwordField, viewButton) {
+                const passwordInput = document.getElementById(passwordField);
+
+                // Toggle password visibility
+                passwordInput.type = (passwordInput.type === 'password') ? 'text' : 'password';
+
+                // Change button text accordingly
+                const buttonText = (passwordInput.type === 'password') ? 'View Password' : 'Hide Password';
+
+                // Reset input field to original password when hiding
+                if (passwordInput.type === 'password') {
+                    passwordInput.value = '**********';
+                }
+
+                viewButton.innerText = buttonText;
+            }
+
+            function logout() {
+                // Perform logout actions, such as clearing session, redirecting to the login page, etc.
+                window.location.href = "{{ url_for('login') }}";
+            }
+
+    </script>
+        </script>
+    </div>
+</body>
+
+</html>
