@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+.vscode/
+lib
+bin
+include
+lib64
+pyvenv.cfg
+var
+
