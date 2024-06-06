@@ -105,7 +105,7 @@ class PasswordManager(QMainWindow):
         self.theme_button = QPushButton("Switch Theme")
         self.theme_button.setFixedWidth(100)  # Set fixed width for consistency
 
-        self.add_button = QPushButton("Add New Password")
+        self.add_button = QPushButton("Add New")
         self.add_button.setFixedWidth(100)
 
         self.theme_button.clicked.connect(self.switch_theme)
